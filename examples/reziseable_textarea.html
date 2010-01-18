@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>Resizeable text area</title>
+    <script type="text/javascript" src="../AJS.js"></script>
+    <script type="text/javascript" src="../AJS_dnd.js"></script>
+    <link href="../static/style.css" rel="stylesheet" type="text/css" media="all" />
+
+    <style type="text/css">
+        textarea {
+            width: 500px;
+            height: 300px;
+            border: 1px solid #ccc;
+            margin: 0;
+        }
+
+        .ta_handler {
+            background-color: #555;
+            height: 9px;
+            font-size: 7px;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Resizeable text area</h3>
+
+<br />
+
+<form>
+    <textarea id="ta"></textarea>
+</form>
+
+<script>
+var TextAreaResizer = {
+    decorate: function(ta) {
+        ta = AJS.$(ta);
+
+        var on_start = function() { 
+            var root = AJS.dnd.current_root;
+            handler.style.position = 'absolute';
+
+            var ta_pos = AJS.$AP(ta);
+            AJS.setTop(handler, ta_pos.y + ta.offsetHeight);
+            AJS.setLeft(handler, ta_pos.x);
+        }
+
+        var on_drag = function() {
+            var root = AJS.dnd.current_root;
+            var ta_pos = AJS.$AP(ta);
+            var d_e_top = AJS.$AP(root).y;
+
+            if(d_e_top > ta_pos.y) {
+                AJS.setWidth(root, ta.offsetWidth);
+                AJS.setHeight(ta, d_e_top - ta_pos.y);
+            }
+        }
+
+        var move_filter = function(x, y) {
+            var ta_top = AJS.$AP(ta).y;
+            return [x, y < ta_top && ta_top || y];
+        }
+
+        var handler = AJS.DIV({className: 'ta_handler'});
+        AJS.setWidth(handler, ta.offsetWidth);
+
+        AJS.dnd.dragAble(handler, {move_x: false, 
+                                   on_drag: on_drag,
+                                   on_start: on_start,
+                                   move_filter: move_filter});
+        AJS.insertAfter(handler, ta);
+    }
+};
+TextAreaResizer.decorate('ta');
+</script>
+
+</body>
+</html>

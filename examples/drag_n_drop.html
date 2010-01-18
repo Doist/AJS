@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Drag and drop example</title>
+  <script type="text/javascript" src="../AJS.js"></script>
+  <script type="text/javascript" src="../AJS_dnd.js"></script>
+  <link href="../static/style.css" rel="stylesheet" type="text/css" media="all" />
+
+  <style type="text/css">
+    .draggy {
+      width: 100px;
+      height: 100px;
+      background-color: #ffffcc;
+      z-index: 100;
+    }
+
+    .draggy_handler {
+      background-color: #999;
+      padding: 5px 0 5px 0;
+      text-align: center;
+      cursor: move;
+    }
+
+    .droppy {
+      width: 300px;
+      height: 300px;
+      color: white;
+    }
+
+    .color_red { background-color: red; }
+    .color_blue { background-color: blue; }
+
+    #drop_red {
+      float: left;
+    }
+
+    #drop_blue {
+      float: right;
+    }
+  </style>
+
+</head>
+<body>
+
+<h3>Drag and drop made easy</h3>
+<div id="draggy" class="draggy" style="position: absolute; left: 50%;">
+  <div id="draggy_handler" class="draggy_handler">
+    Drag handler
+  </div>
+</div>
+<br />
+<div>
+  <div class="droppy color_red" id="drop_red">Color draggy red</div>
+  <div class="droppy color_blue" id="drop_blue">Color droppy blue</div>
+</div>
+
+<script>
+var drop_red = AJS.$('drop_red');
+var drop_blue = AJS.$('drop_blue');
+
+var onDrag = function() {
+    var root = AJS.dnd.current_root;
+    if(AJS.isOverlapping(root, drop_red))
+        AJS.addClass(root, 'color_red');
+    else if(AJS.isOverlapping(root, drop_blue))
+        AJS.addClass(root, 'color_blue');
+    else {
+        AJS.removeClass(root, 'color_blue');
+        AJS.removeClass(root, 'color_red');
+    }
+}
+
+AJS.dnd.dragAble('draggy', {
+    handler: 'draggy_handler',
+    on_drag: onDrag
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>&lambda;JS fx API reference</title>
+    <script type="text/javascript" src="../AJS.js"></script>
+    <script type="text/javascript" src="../AJS_fx.js"></script>
+    <script type="text/javascript" src="../static/script.js"></script>
+    <link rel="stylesheet" href="../static/style.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="top">
+    <span class="shortcut">&lambda;</span>JS fx API reference<br />
+    <div id="legend">
+        Legend:
+        <span class="optional">Optional parameters</span>,
+        <span class="shortcut">Function shortcut</span>
+    </div>
+</div>
+
+<h1><a name="dnd_fn">Effects</a></h1>
+<div class="fns">
+    <h3>AJS.fx.highlight(elm, options)</h3>
+    Yellow highlight the element.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "AJS.fx.highlight(AJS.$('fluffy_1'), {duration: 1000})"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_1" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="AJS.fx.highlight(AJS.$('fluffy_1'), {duration: 1000})">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.fadeIn(elm, options)</h3>
+    Fade the element in.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "AJS.fx.fadeIn(AJS.$('fluffy_2'))"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_2" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="AJS.fx.fadeIn(AJS.$('fluffy_2'))">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.fadeOut(elm, options)</h3>
+    Fade the element out.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "AJS.fx.fadeOut(AJS.$('fluffy_2'))"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_3" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="AJS.fx.fadeOut(AJS.$('fluffy_3'))">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.setWidth(elm, options)</h3>
+    Animate resize of width. 
+    
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "AJS.fx.setWidth(AJS.$('fluffy_4'), {from: 150, to: 400})"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_4" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="AJS.fx.setWidth(AJS.$('fluffy_4'), {from: 150, to: 400})">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.setHeight(elm, options)</h3>
+    Animate resize of hieght.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "AJS.fx.setHeight(AJS.$('fluffy_5'), {from: 0, to: 50})"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_5" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="AJS.fx.setHeight(AJS.$('fluffy_5'), {from: 0, to: 50})">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.Style(elm, property, options)</h3>
+    Executes an effect from one position to the other.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "new AJS.fx.Style(AJS.$('fluffy_6'), 'width').custom(50, 300)"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_6" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+            <div class="run" onclick="new AJS.fx.Style(AJS.$('fluffy_6'), 'width').custom(50, 300)">Run</div>
+        </dd>
+    </dl>
+
+    <h3>AJS.fx.Styles(elm, options)</h3>
+    Execute an effect on multiple CSS properties.
+
+    <dl>
+        <dt>Code example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    "new AJS.fx.Styles(AJS.$('fluffy_7')).custom(",
+                    "   {'height': [50, 100], 'width': [150, 300]}",
+                    ")"
+                );
+            </script>
+        </dd>
+
+        <dt>Live example:</dt>
+        <dd>
+            <div id="fluffy_7" style="width: 150px; padding: 5px; border: 1px solid #999;">Fluffy</div>
+        </dd>
+        <dd>
+        <div class="run" onclick="new AJS.fx.Styles(AJS.$('fluffy_7')).custom({'height': [50, 100], 'width': [150, 300]})">Run</div>
+        </dd>
+    </dl>
+</div>
+
+</body>
+</html>

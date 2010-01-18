@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>Doing an AJAX Yahoo image search</title>
+    <script type="text/javascript" src="../AJS.js"></script>
+    <script type="text/javascript" src="../AJS_fx.js"></script>
+    <link href="../static/style.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script type="text/javascript">
+    function doSearch() {
+        var container = AJS.$('image_container');
+        AJS.RCN(container, AJS.TN("Doing search..."));
+
+        var url = "http://api.search.yahoo.com/ImageSearchService/V1/imageSearch";
+        var d = AJS.loadJSONDoc(url);
+        d.addCallback(function(o) { showResults(container, o); });
+
+        var form = AJS.$('formy');
+        d.sendReq({appid: "YahooDemo", 
+                   query: AJS.$f(form, 'q').value,
+                   results: AJS.$f(form, 'r').value,
+                   output: "json"})
+        return false;
+    }
+
+    var tmpl_image = AJS.join(' ', [
+        '<p><a href="%(url_big)" target="_blank">',
+            '<img src="%(url_small)" /></a>',
+        '</p>']);
+    function showResults(container, o) {
+        AJS.RCN(container, null);
+        AJS.map(o.ResultSet.Result, function(data) {
+            var d = {url_big: data.Url, url_small: data.Thumbnail.Url};
+            var img = AJS.HTML2DOM(AJS.RND(tmpl_image, d));
+            AJS.setOpacity(img, 0);
+            AJS.fx.fadeIn(img);
+            AJS.ACN(container, img);
+        });
+    }
+    </script>
+</head>
+<body>
+
+<h3>Doing an AJAX Yahoo image search</h3>
+<form onsubmit="return doSearch()" id="formy">
+    <dl>
+        <dt>Query</dt>
+        <dd><input type="text" name="q" value="ninja" /></dd>
+
+        <dt>Max number of results</dt>
+        <dd><input type="text" name="r" value="10" /></dd>
+
+        <dt><input type="submit" value="Just do it!" />
+    </dl>
+</form>
+
+<h3>Results</h3>
+<div id="image_container">
+    No search made.
+</div>
+
+</body>
+</html>

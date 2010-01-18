@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>&lambda;JS DND API reference</title>
+    <script type="text/javascript" src="../AJS.js"></script>
+    <script type="text/javascript" src="../static/script.js"></script>
+    <link rel="stylesheet" href="../static/style.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="top">
+    <span class="shortcut">&lambda;</span>JS DND API reference<br />
+    <div id="legend">
+        Legend:
+        <span class="optional">Optional parameters</span>,
+        <span class="shortcut">Function shortcut</span>
+    </div>
+</div>
+
+<h1><a name="dnd_fn">Drag and drop</a></h1>
+<div class="fns">
+    <p>
+        Learn best through examples? Check out:
+        <ul>
+            <li><a href="../examples/drag_n_drop.html">Drag and drop example</a></li>
+            <li><a href="../examples/sortable_list.html">Sortable list</a></li>
+            <li><a href="../examples/reziseable_textarea.html">Resizeable text area</a></li>
+        </ul>
+    </p>
+
+    <h3>AJS.dnd.current_root</h3>
+    When dragging begins this object holds the element that is moved.
+
+    <h3>AJS.dnd.current_handler</h3>
+    When dragging begins this object holds the element that drags. It has some extra information attached to it:
+    <dl>
+        <dt><code>AJS.dnd.current_handler._kws</code>:</dt>
+        <dd>The extra arguments that were passed to dragAble</dd>
+
+        <dt><code>AJS.dnd.current_handler._root</code>:</dt>
+        <dd>The element that the handler moves.</dd>
+    </dl>
+
+
+    <h3>AJS.dnd.dragAble(element<span class="optional">, args</span>)</h3>
+    Make <code>element</code> drag able. The element's <code>style.position</code> should be absolute.
+
+    <dl>
+        <dt><code>args</code>:</dt>
+        <dd>
+            All <code>args</code> are optional.
+            <ul>
+                <li><b>move_x</b>:<br />
+                    Enable horizontal move. Default <code>true</code>.
+                </li>
+                <li>
+                    <b>move_y</b>:<br />
+                    Enable vertical move. Default <code>true</code>.
+                </li>
+                <li>
+                    <b>scroll_on_overflow</b>:<br />
+                    Scroll the page on overflow. Default: <code>true</code>.
+                </li>
+
+                <li>
+                <b>on_start</b>:<br />
+                A callback that is triggered when the drag is started. <br /> 
+                Signature of this function is <code>on_start()</code>.
+                </li>
+
+                <li>
+                <b>on_drag</b>:<br />
+                A callback that is triggered when a dragable is dragged. <br /> 
+                Signature of this function is <code>on_drag(new_x, new_y)</code>.
+                </li>
+
+                <li>
+                <b>on_end</b>:<br />
+                A callback that is triggered when the drag is stopped. <br /> 
+                Signature of this function is <code>on_start()</code>.
+                </li>
+
+                <li>
+                <b>move_filter</b>:<br />
+                This function can control the x and y coordinates.<br /> 
+                Signature of this function is <code>move_filter(x, y) -&gt; [x, y]</code>.
+                </li>
+            </ul>
+        </dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    '//This will make the element drag able',
+                    'AJS.dragAble("cow")'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.dnd.removeDragAble(element)</h3>
+    Remove drag ability from <code>element</code>.
+</div>
+
+
+</body>
+</html>
+

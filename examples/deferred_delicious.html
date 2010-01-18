@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>Deferred example with Deli.cio.us</title>
+  <script type="text/javascript" src="../AJS.js"></script>
+  <link href="../static/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<h3>Deferred example with Deli.cio.us</h3>
+<p>
+  Look in the source of this HTML to get a good idea what AJS deferred is all about.
+</p>
+
+<script type="text/javascript">
+var d = AJS.getRequest("http://del.icio.us/feeds/json/amix")
+
+d.addCallback(function(res_txt, req) {
+  //Eval response text to get a Delicious object
+  AJS.evalTxt(res_txt);
+  return Delicious;
+})
+d.addCallback(function(o, req) { 
+  //o is now Delicious object
+  alert('Total length of posts: ' + o.posts.length);
+})
+
+d.addErrback(function(res_txt, req) { 
+  alert("Error encountered.") 
+})
+d.addErrback(function(res_txt, req) {
+   alert("In here we could have some clean up code.") 
+})
+d.sendReq()
+</script>
+
+</body>
+</html>

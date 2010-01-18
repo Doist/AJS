@@ -1,0 +1,140 @@
+body {
+    font-family: helvetica, verdana, sans-serif;
+    font-size: 12px;
+    background-color: #fff;
+    margin: 20px 20px 40px 20px;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+h1, h2 {
+    font-size: 19px;
+    border: 1px solid #ccc;
+    padding: 5px 5px 6px 5px;
+    background-color: #ffffcc;
+    margin: 35px 0 5px 0;
+}
+
+h2 {
+    background-color: #e5ecf9;
+    margin: 20px 0 0px 0;
+    font-size: 16px;
+}
+
+h3 {
+    font-size: 15px;
+    margin: 20px 0 5px 0;
+}
+
+code {
+    background-color: #f7eafd;
+    color: #111;
+}
+
+ul {
+    margin: 0 0 0 30px;
+    padding: 0;
+}
+li {
+    padding: 2px 0 2px 0;
+}
+
+.fns {
+    padding: 0 15px 0;
+}
+
+#top {
+    font-size: 30px;
+    text-align: center;
+}
+
+#legend {
+    font-size: 12px;
+    padding-top: 10px;
+}
+
+.shortcut {
+    background-color: #d9ffde;
+}
+
+.optional {
+    color: #555;
+    background-color: #ddd;
+}
+
+dl {
+    margin: 0 0 0 15px;
+    padding: 0;
+}
+dt {
+    color: #333;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+dd {
+    margin: 0 0 0 15px;
+}
+dd ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* toc */
+.TOC {
+    list-style: none;
+    margin: 0;
+    padding: 10px 0 0 18px;
+}
+.TOC li {
+    padding: 5px 0;
+}
+.TOC a {
+    color: blue;
+}
+.top_link {
+    color: #999;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+
+/* example style */
+.expander {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.show {
+    color: blue;
+}
+.hide {
+    color: red;
+}
+
+.div_help {
+    font-family: courier, sans-serif;
+    line-height: 16px;
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #EAF9FF;
+    border: 1px solid #ccc;
+}
+
+.comment {
+    color: #333;
+}
+
+.vars {
+    color: #DB00AF;
+}
+
+.run {
+    color: green;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 5px;
+}

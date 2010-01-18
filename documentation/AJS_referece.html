@@ -1,0 +1,1253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>&lambda;JS 4.5 API reference</title>
+    <script type="text/javascript" src="../AJS.js"></script>
+    <script type="text/javascript" src="../static/script.js"></script>
+    <link rel="stylesheet" href="../static/style.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="top">
+    <span class="shortcut">&lambda;</span>JS 4.5 API reference<br />
+    <div id="legend">
+        Legend:
+        <span class="optional">Optional parameters</span>,
+        <span class="shortcut">Function shortcut</span>
+    </div>
+</div>
+
+<h1><a name="toc">Table of contents</a></h1>
+<script>
+buildTOC(
+    [['General accessor functions', 'general_accessor_fn'],
+     ['Array functions', 'array_fn'],
+     ['Functional programming', 'fn_fn'],
+     ['DOM functions', 'dom_fn'],
+     ['AJAX functions', 'ajax_fn'],
+     ['Position and size', 'pos_siz'],
+     ['Events', 'ev_fn'],
+     ['Miscellaneous functions', 'misc_fn'],
+     ['AJS deferred', 'deffered_fn']
+    ]
+);
+</script>
+
+
+
+<h1><a name="general_accessor_fn">General accessor functions</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <h3>AJS.getQueryArgument(var_name)</h3>
+    Returns the value of <code>var_name</code> from URL (e.g. <code>http://domain.com/?var_name=value</code>).
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that current browser URL is http://d.com/?cow=mad',
+                    'var mycow = AJS.getQueryArgument("cow")',
+                    '//%mycow equals to mad'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.isIe()</h3>
+    Returns <code>true</code> if the current browser is Internet Explorer. Else <code>false</code> is returned.
+
+    <h3>AJS.isNetscape7()</h3>
+    Returns <code>true</code> if the current browser is Netscape 7. Else <code>false</code> is returned.
+
+    <h3>AJS.isSafari()</h3>
+    Returns <code>true</code> if the current browser is Apple Safari. Else <code>false</code> is returned.
+
+    <h3>AJS.isOpera()</h3>
+    Returns <code>true</code> if the current browser is Opera. Else <code>false</code> is returned.
+
+    <h3>AJS.isMozilla()</h3>
+    Returns <code>true</code> if the current browser is Mozilla. Else <code>false</code> is returned.
+
+    <h3>AJS.isMac()</h3>
+    Returns <code>true</code> if the current system is Mac OS X. Else <code>false</code> is returned.
+</div>
+
+
+<h1><a name="array_fn">Array functions</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <h3>AJS.createArray(v)</h3>
+    Takes a value <code>v</code> and returns <code>[v]</code>. <code>v</code> is returned as is if it already is an array.
+
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$A</span></dd>
+
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var arr1 = AJS.$A("hello")',
+                    '//%arr1 equals ["hello"]',
+                    'var arr2 = AJS.$A(arr1)',
+                    '//%arr2 equals ["hello"]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.forceArray(array)</h3>
+    Returns a true <code>array</code>. This method is useful to force <code>arguments</code> to act as an array instead of an object.
+
+    <h3>AJS.join(delim, list)</h3>
+    Puts all the elements of <code>list</code> into a string. The elements are separated by the specified delimiter <code>delim</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var s = AJS.join("- ", [1, 2, 3])',
+                    '//%s equals "1- 2- 3"'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.isIn(element, list)</h3>
+    Returns <code>true</code> if the <code>element</code> is found in <code>list</code>, otherwise <code>false</code> is returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.isIn("cow", [1, 2, "cow"])',
+                    '//%b equals true',
+                    'b = AJS.isIn("cow", [1, 2, 3])',
+                    '//%b equals false'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getIndex(element, list<span class="optional">, eval_fn</span>)</h3>
+    Returns index of <code>element</code> in <code>list</code>. If the <code>element</code> isn't found <code>-1</code> is returned.
+    <br /> An optional function <code>eval_fn(list_elm) &rarr; boolean</code> can be sent to evalute the element.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var i = AJS.getIndex("cow", [1, 2, "cow"])',
+                    '//%i is 2',
+                    'var j = AJS.getIndex(666, [1, 2, "cow"])',
+                    '//%j is -1'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getFirst(list)</h3>
+    Returns the first element of <code>list</code>. If the list is empty <code>null</code> is returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var first = AJS.getFirst([42, 2, 666])',
+                    '//%first is 42',
+                    'first = AJS.getFirst([])',
+                    '//%first is now null'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getLast(list)</h3>
+    Returns the last element of <code>list</code>. If the list is empty <code>null</code> is returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var last = AJS.getLast([1, 2, 666])',
+                    '//%last is 666'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.update(list1, list2)</h3>
+    Extends <code>list1</code> with keys and values from <code>list2</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var new_d = AJS.update({a: 1, b: 2}, {c: 3})',
+                    '//%new_d equals {a: 1, b: 2, c: 3}',
+                    'var g = AJS.update([1, 2, 3], [5])',
+                    '//%g equals [5, 2, 3]',
+                    '//This function has side effects',
+                    'AJS.update(new_d, {d: 42})',
+                    '//%new_d equals {a: 1, b: 2, c: 3, d: 42}'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.flattenList(list)</h3>
+    Flats out <code>list</code> and returns the result. See the example.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var a = AJS.flattenList([[1, 2, [3, 4]], 5])',
+                    '//%a equals [1, 2, 3, 4, 5]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.flattenElmArguments(args)</h3>
+    Flats out <code>[[elm1, ..., elmN], valX]</code> and returns the <code>[elm1, ..., elmN, valX]</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var a = AJS.flattenElmArguments([[AJS.getBody(), AJS.getBody(), [AJS.getBody(), AJS.getBody()]]])',
+                    '//%a equals [body, body, body, body]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+</div>
+
+
+<h1><a name="fn_fn">Functional programming</a> <a href="#toc" class="top_link">[top]</a></h1>
+
+<div class="fns">
+    <h3>AJS.map(list, fn<span class="optional">, start_index, end_index</span>)</h3>
+    Runs function <code>fn</code> on all elements of <code>list</code>. Signature of fn is: <code>fn(element, index)</code>.
+
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var sum = 0',
+                    'AJS.map([1, 2, 3], function(n, i) {',
+                    '     sum += n',
+                    '})',
+                    '//%sum equals to 6'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.rmap(list, fn)</h3>
+    Runs function <code>fn</code> on all elements of <code>list</code> in reversed order. Signature of fn is: <code>fn(element, index)</code>.
+
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var pretty = ""',
+                    'AJS.rmap([1, 2, 3], function(n, i) {',
+                    '     pretty += n + "! "',
+                    '})',
+                    '//%pretty equals to "3! 2! 1! "'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.filter(list, fn<span class="optional">, start_index, end_index</span>)</h3>
+    Runs function <code>fn</code> on all elements of <code>list</code> and returns all the elements of <code>list</code> where <code>fn(elm)</code> equals <code>true</code>.
+
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var div_with_2 = AJS.filter([1, 5, 8, 4], function(n) {',
+                    '     return (n &#37; 2 == 0)',
+                    '})',
+                    '//%div_with_2 equals [8, 4]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.partial(fn, args)</h3>
+    Return a partially applied function. See example.
+
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var add = function(a, b) {',
+                    '     return a + b',
+                    '}',
+                    'var add_one = AJS.partial(add, 1)',
+                    '//%add_one(41) equals 42'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+</div>
+
+
+<h1><a name="dom_fn">DOM functions</a> <a href="#toc" class="top_link">[top]</a></h1>
+
+<h2>Accessors</h2>
+
+<div class="fns">
+    <h3>AJS.getElement(id)</h3>
+    Returns the DOM element with the id="<code>id</code>".
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$</span></dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    'var cow = AJS.$("cow")',
+                    '//%cow equals to the DOM element with id="cow"',
+                    '//We pretend that we don\' have an element with id "sheep"',
+                    'var sheep = AJS.$("sheep")',
+                    '//%sheep equals to null'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getElements(id1, id2, idN)</h3>
+    Returns a list of DOM elements with <code>id1, id2, idN</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$$</span></dd>
+    </dl>
+
+    <h3>AJS.getElementsByTagAndClassName(tag_name, class_name<span class="optional">, parent</span>)</h3>
+    Returns a list of DOM elements. If you want to ignore the <code>tag_name</code> or <code>class_name</code> then set them to <code>null</code>. The whole document is searched, if <code>parent</code> isn't set.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$bytc</span></dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var h3s = AJS.$bytc("h3")',
+                    '//%h3s will be a list of all h3 elements on the page, e.g. [h31, ..., h3N]',
+                    'var h3s_cow = AJS.$bytc("h3", "cow")',
+                    '//%h3s_cow will be a list of all h3 elements on the page width class "cow"',
+                    '//We pretend that we have an UL element with id "horsy"',
+                    'var horsy_li = AJS.$bytc("li", null, AJS.$("horsy"))',
+                    '//%horsy_li will be all the LI elements of "horsy", e.g. [LI_1, ..., LI_N]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.nodeName(element)</h3>
+    Returns the node name of <code>element</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.nodeName(AJS.getBody())',
+                    '//%b equals "body"'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+    <h3>AJS.getParentBytc(element, tag_name, class_name)</h3>
+    Look on <code>element</code>'s parents and return the first match.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend we have <div class="Horse"><div><div id="cow"></div></div></div>',
+                    'var child = AJS.$("cow")',
+                    'var parent = AJS.getParentBytc(child, null, "Horse")'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.hasParent(element, parent_to_consider, max_look_up)</h3>
+    Returns <code>true</code> if the <code>element</code> has a parent, <code>false</code> otherwise. <code>max_look_up</code> specifies how many parents to consider. <code>parent_to_concider</code> is the parent we are looking for.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.hasParent(AJS.getBody().lastChild, AJS.getBody(), 5)',
+                    '//%b equals true'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+    <h3>AJS.getPreviousSiblingBytc(element, tag_name, class_name)</h3>
+    Look on <code>element</code>'s previous siblings and return the first match.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend we have <span></span><div></div><div id="cow"></div>',
+                    'var child = AJS.$("cow")',
+                    'var p_sibling = AJS.getPreviousSiblingBytc(child, "span")',
+                    '//%p_sibling will be a span element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getNextSiblingBytc(element, tag_name, class_name)</h3>
+    Look on <code>element</code>'s next siblings and return the first match.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend we have <div id="cow"></div><div></div><span></span>',
+                    'var child = AJS.$("cow")',
+                    'var n_sibling = AJS.getNextSiblingBytc(child, "span")',
+                    '//%n_sibling will be a span element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getBody()</h3>
+    Returns the body DOM element.
+</div>
+
+<h2>Form related</h2>
+
+<div class="fns">
+    <h3>AJS.getFormElement(form, name)</h3>
+    Returns a form element with the specified <code>name</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$f</span></dd>
+
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend we have a form with id="my_form"',
+                    '//and an input area with name "cow"',
+                    'var cow_value = AJS.$f("my_form", "cow").value',
+                    '//%cow_value will equal the value of the input area with name="cow"'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.formContents(form)</h3>
+    Returns a JSON representation of <code>form</code>'s contents. Really useful for AJAX calls.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We have a form <form id="farm"><input type="text" name="animal" value="Cow" /></form>',
+                    'var farm_contents = AJS.formContents("farm")',
+                    '//%farm_contents will be {animal: "Cow"}'
+                );
+            </script>
+        </dd>
+    </dl>
+</div>
+
+<h2>DOM related</h2>
+
+<div class="fns">
+
+    <h3>AJS.documentInsert(element)</h3>
+    Append a DOM element using <code>document.writeln</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.DI</span></dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.DI(AJS.DIV("Hello world"))',
+                    '//The DIV will be written to the page using document.writeln'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.appendChildNodes(elm, elm1, elm2, elmN)</h3>
+    Append <code>elm1, elm2, elmN</code> to <code>elm</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.ACN</span></dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.ACN(AJS.getBody(), AJS.DIV("Hello"))',
+                    '//A DIV element will be appended in the BODY element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.appendToTop(elm, elm1, elm2, elmN)</h3>
+    Append <code>elm1, elm2, elmN</code> to the top of <code>elm</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.ACN(AJS.getBody(), AJS.DIV("Hello"))',
+                    '//A DIV element will be appended in the top of BODY element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.replaceChildNodes(elm, elm1, elm2, elmN)</h3>
+    Replace <code>elm</code>'s child nodes with <code>elm1, elm2, elmN</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.RCN</span></dd>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.RCN(AJS.getBody(), AJS.DIV("Hello"))',
+                    '//All BODY\'s children will be replaced with a DIV element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.insertAfter(element, reference_elm)</h3>
+    Insert <code>element</code> after <code>reference_elm</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.insertAfter(AJS.DIV("Hello"), AJS.getBody().firstChild)',
+                    '//A DIV will be inserted after BODY\'s first child'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.insertBefore(element, reference_elm)</h3>
+    Insert <code>element</code> before <code>reference_elm</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.insertBefore(AJS.DIV("Hello"), AJS.getBody().firstChild)',
+                    '//A DIV will be inserted before BODY\'s first child'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.swapDOM(elm_to_replace, new_elm)</h3>
+    Replace the DOM of <code>elm_to_replace</code> with the DOM of <code>new_elm</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.swapDOM(AJS.getBody(), AJS.DIV("Hello"))',
+                    '//The DOM of body will be replaced with a DIV element'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.removeElement(elm1, elm2, elmN)</h3>
+    Remove <code>elm1, elm2, elmN</code>.
+
+    <h3>AJS.createDOM(name, attrs)</h3>
+    Create a new DOM element with tag <code>name</code>. <code>attrs</code> should be an array.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var p = AJS.createDOM("p", [{id: "my_p", style: "color: red"}, "Hello world"])',
+                    '//%p will <p id="my_p" style="color: red;">Hello world</p>'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.createDOM shortcuts</h3>
+    You can use shortcuts to speed up creation of elements.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var my_div = AJS.DIV({id: "Test"}, AJS.P({className: "my_p"}, "Hello world"))',
+                    '//%my_div equals <div id="Test"><p class="my_p">Hello world</p></div>'
+                );
+            </script>
+        </dd>
+        <dt>Current shortcuts:</dt>
+        <dd>
+            <ul>
+                <li>AJS.UL</li>
+                <li>AJS.LI</li>
+                <li>AJS.TD</li>
+                <li>AJS.TR</li>
+                <li>AJS.TH</li>
+                <li>AJS.TBODY</li>
+                <li>AJS.TABLE</li>
+                <li>AJS.INPUT</li>
+                <li>AJS.SPAN</li>
+                <li>AJS.B</li>
+                <li>AJS.A</li>
+                <li>AJS.DIV</li>
+                <li>AJS.IMG</li>
+                <li>AJS.BUTTON</li>
+                <li>AJS.H1</li>
+                <li>AJS.h3</li>
+                <li>AJS.H3</li>
+                <li>AJS.BR</li>
+                <li>AJS.TEXTAREA</li>
+                <li>AJS.FORM</li>
+                <li>AJS.P</li>
+                <li>AJS.SELECT</li>
+                <li>AJS.OPTION</li>
+                <li>AJS.TN</li>
+                <li>AJS.IFRAME</li>
+                <li>AJS.SCRIPT</li>
+                <li>AJS.CENTER</li>
+                <li>AJS.DL</li>
+                <li>AJS.DT</li>
+                <li>AJS.DD</li>
+                <li>AJS.SMALL</li>
+            </ul>
+        </dd>
+    </dl>
+
+    <h3>AJS.setHTML(elm1, elm2, elmN, html)</h3>
+    Set the innerHTML of <code>elm1, elm2, elmN</code> to <code>html</code>.
+
+</div>
+
+<h2>CSS related</h2>
+<div class="fns">
+    <h3>AJS.showElement(elm1, elm2, elmN)</h3>
+    Show <code>elm1, elm2, elmN</code>.
+
+    <h3>AJS.hideElement(elm1, elm2, elmN)</h3>
+    Hide <code>elm1, elm2, elmN</code>.
+
+    <h3>AJS.isElementShown(element)</h3>
+    Returns <code>true</code> if the <code>element</code> is shown, <code>false</code> otherwise. CSS <code>visibility and display</code> is considered.
+
+    <h3>AJS.isElementHidden(element)</h3>
+    Returns <code>true</code> if the <code>element</code> is hidden, <code>false</code> otherwise. CSS <code>visibility and display</code> is considered.
+
+    <h3>AJS.setStyle(elm1, ..., elmN, property, new_value)</h3>
+    Set CSS <code>property</code> of <code>elm1, ..., elmN</code> to <code>new_value</code>.
+    <code>new_value</code> can be <code>{top: 50, left: 40}</code>
+
+    <h3>AJS.setWidth(elm1, elm2, elmN, width)</h3>
+    Set the width of <code>elm1, elm2, elmN</code> to <code>width</code>. <code>width</code> should be an <code>integer</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    'AJS.setWidth(AJS.$("cow"), 500)',
+                    '//or',
+                    'AJS.setWidth(AJS.$("cow"), "500px")'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.setHeight(elm1, elm2, elmN, height)</h3>
+    Set the height of <code>elm1, elm2, elmN</code> to <code>height</code>. <code>height</code> should be an <code>integer</code>.
+
+    <h3>AJS.setLeft(elm1, elm2, elmN, left)</h3>
+    Set the left coordinate of <code>elm1, elm2, elmN</code> to <code>left</code>. <code>left</code> should be an <code>integer</code>.
+
+    <h3>AJS.setRight(elm1, elm2, elmN, right)</h3>
+    Set the right coordinate of <code>elm1, elm2, elmN</code> to <code>right</code>. <code>right</code> should be an <code>integer</code>.
+
+    <h3>AJS.setTop(elm1, elm2, elmN, top)</h3>
+    Set the top coordinate of <code>elm1, elm2, elmN</code> to <code>top</code>. <code>top</code> should be an <code>integer</code>.
+
+    <h3>AJS.setClass(elm1, elm2, elmN, className)</h3>
+    Set the class name of <code>elm1, elm2, elmN</code> to <code>className</code>.
+
+    <h3>AJS.addClass(elm1, elm2, elmN, className)</h3>
+    Add the <code>className</code> to <code>elm1, elm2, elmN</code>.
+
+    <h3>AJS.removeClass(elm1, elm2, elmN, className)</h3>
+    Remove the <code>className</code> from <code>elm1, elm2, elmN</code>.
+
+    <h3>AJS.setOpacity(element, p)</h3>
+    Set the opacity of <code>element</code> to <code>p</code>. <code>p</code> should be <code>0.50</code> if you want 50% transparency.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.setOpacity(AJS.getBody(), 0.50)',
+                    '//This will set the opacity of BODY to 50%'
+                );
+            </script>
+        </dd>
+    </dl>
+
+</div>
+
+<h2>Misc</h2>
+<div class="fns">
+
+    <h3>AJS.HTML2DOM(html<span class="optional">, first_child</span>)</h3>
+    Return a DOM of <code>html</code>. If <code>first_child</code> is set to <code>true</code> then the first child from the <code>html</code> will be returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.HTML2DOM(\'<b id="my_b">Boldy</b>\', true)',
+                    '//%b will now be a DOM element with id "my_b"',
+                    'var b_p = AJS.HTML2DOM(\'<b>Boldy</b><p>Polly</p>\')',
+                    '//%b_p will be a DIV that has B and P as children'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.preloadImages(img_src1, img_src2, img_srcN)</h3>
+    Preloads images when the window is loaded.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.preloadImages(\'images/img1.gif\', \'images/img2.gif\')',
+                    '//images/img1.gif and images/img2.gif will be pre-loaded'
+                );
+            </script>
+        </dd>
+    </dl>
+
+</div>
+
+
+<h1><a name="ajax_fn">AJAX</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+
+    <h3>AJS.BASE_URL</h3>
+    If this is set, then you can use relative paths.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.BASE_URL = "http://del.icio.us"',
+                    'var d1 = AJS.getRequest("/feeds/json/amix")',
+                    '...',
+                    '//You can still use absolute paths',
+                    'var d2 = AJS.getRequest("http://del.icio.us/feeds/json/amix")',
+                    '...'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getXMLHttpRequest()</h3>
+    Returns a new <code>XMLHTTPRequest</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var req = AJS.getXMLHttpRequest()',
+                    'req.open("GET", "http://example.com/?var=test", true)',
+                    '...'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getRequest(url<span class="optional">, data, type</span>)</h3>
+    Perform a XMLHttpRequest to <code>url</code> and wrap it in a <a href="#AJS_deferred">deferred</a>.<br />
+    <code>data</code> could be a JSON object. <code>type</code> could be <code>GET</code> (<code>POST</code> is default). Both <code>data</code> and <code>type</code> are optional.
+    <dl>
+        <dt>Example with del.icio.us:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var d = AJS.getRequest("http://del.icio.us/feeds/json/amix")',
+                    'd.addCallback(function(res_txt, req) { alert(res_txt) })',
+                    'd.addErrback(function(res_txt, req) { alert("Error encountered.") })',
+                    'd.sendReq()',
+                    '//Response will be alerted if no errors are encountered.',
+                    '//"Error encountered" will be alerted if an error is encountered.'
+                );
+            </script>
+        </dd>
+
+        <dt>Example with a GET request:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var d = AJS.getRequest("http://google.com/search", {q: "test"}, "GET")',
+                    '//URL will be http://google.com/search?q=test',
+                    'd.addCallback( function(res_txt, req) { alert(res_txt) } )',
+                    'd.sendReq()',
+                    '//or equivalent, but more stylish:',
+                    'd = AJS.getRequest("http://www.google.dk/search", null, "GET")',
+                    'd.addCallback( function(res_txt, req) { alert(res_txt) } )',
+                    'd.sendReq({q: "test"})'
+                );
+            </script>
+        </dd>
+
+        <dt>Example with addCallbacks:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var d = AJS.getRequest("http://del.icio.us/feeds/json/amix")',
+                    'd.addCallbacks(',
+                    '     function(res_txt, req) { alert(res_txt) }, ',
+                    '     function(res_txt, req) { alert("Error encountered.") }',
+                    ')',
+                    'd.sendReq()'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.serializeJSON(object)</h3>
+    Serialize the <code>object</code> to a <a href="http://www.json.org/js.html">JSON</a> string.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var str = AJS.serializeJSON([{name: "Cow"}, {name: "Horse"}])',
+                    '//%str will equal to "[{"name":"Cow"},{"name":"Horse"}]"'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.loadJSON(url)</h3>
+    Do a simple XMLHttpRequest to <code>url</code> and get the response as a <a href="http://www.json.org/js.html">JSON</a> object.
+    <dl>
+        <dt>Example with Yahoo image search:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var d = AJS.loadJSON("http://api.search.yahoo.com/ImageSearchService/V1/imageSearch")',
+                    'd.addCallback(function(o) {',
+                    '     alert(o.ResultSet.totalResultsAvailable)',
+                    '})',
+                    'd.sendReq({appid: "YahooDemo", query: "potato", results: 2, output: "json"})'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.evalScriptTags(html)</h3>
+    Evaluate the script tags inside the <code>html</code>.
+
+    <h3>AJS.evalTxt(js_txt)</h3>
+    Evaluates <code>js_txt</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var p = AJS.evalTxt("{name: \'Amir\'}")',
+                    '//%p will be a JSON object: {name: \'Amir\'}'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+</div>
+
+
+<h1><a name="pos_siz">Position and size</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <h3>AJS.getMousePos(event)</h3>
+    Returns <code>{x: mouse_pos_x, y: mouse_pos_y}</code>
+
+    <h3>AJS.getScrollTop()</h3>
+    Returns the current page scroll top as <code>integer</code>.
+
+    <h3>AJS.absolutePosition(element)</h3>
+    Returns the absolute position of a DOM element as <code>{x: elm_left, y: elm_top}</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    'var pos = AJS.absolutePosition(AJS.$("cow"))',
+                    '//%pos.x will be the absolute left position',
+                    '//%pos.y will be the absolute top position'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.getWindowSize()</h3>
+    Returns <code>{w: window_width, h: window_height}</code>.
+
+    <h3>AJS.isOverlapping(elm1, elm2)</h3>
+    Returns <code>true</code> if <code>elm1</code> and <code>elm2</code> overlap each other, otherwise <code>false</code> is returned.
+
+</div>
+
+
+<h1><a name="ev_fn">Events</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <h3>AJS.getEventElm(event)</h3>
+    Returns the DOM element that triggered the <code>event</code>.
+
+    <h3>AJS.addEventListener(element, type, fn<span class="optional">, listen_once, cancle_bubble</span>)</h3>
+    Add an event listener of <code>type</code> on the <code>element</code>.
+    <dl>
+        <dt><code>fn</code>:</dt>
+        <dd>
+            the function that is going to be triggered. Signature is <code>fn(event)</code>. <br /> 
+            <code>event.key</code> denotes the ASCII key if event type is keypress, keydown or keyup.
+        </dd>
+
+        <dt><code>type</code> can be:</dt>
+        <dd>
+            <ul>
+                <li>"click"</li>
+                <li>"mouseover"</li>
+                <li>"mousemove"</li>
+                <li>"mouseout"</li>
+                <li>"load"</li>
+                <li>...</li>
+            </ul>
+        </dd>
+
+        <dt><code>listen_once</code>:</dt>
+        <dd>
+            a <code>boolean</code> that specifies if the event should only listen once. Optional.
+        </dd>
+
+        <dt><code>cancle_bubble</code>:</dt>
+        <dd>
+         a <code>boolean</code> that specifies if bubbling should be disabled. Optional.
+        </dd>
+
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.AEV</span></dd>
+
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    'AJS.AEV(AJS.$("cow"), "click", function(e) {',
+                    '     alert("Element cow is clicked")',
+                    '})'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.removeEventListener(element, type, fn<span class="optional">, cancle_bubble</span>)</h3>
+    Remove an event listener from <code>element</code>.
+    <dl>
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.REV</span></dd>
+
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    '//We pretend that we have an element with id "cow"',
+                    '//First we add an event listener:',
+                    'var fn = function(e) { alert("Element cow is clicked") }',
+                    'AJS.AEV(AJS.$("cow"), "click", fn)',
+                    '//Then we remove it again:',
+                    'AJS.REV(AJS.$("cow"), "click", fn)'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.bind(fn, scope<span class="optional">, extra_args</span>)</h3>
+    Bind function <code>fn</code> to <code>scope</code>.<br />
+    <dl>
+        <dt><code>extra_args</code>:</dt>
+        <dd>
+            an <code>array</code> of extra parameters that should be sent to <code>fn</code>. Optional.
+        </dd>
+
+        <dt>Shortcut:</dt>
+        <dd><span class="shortcut">AJS.$b</span></dd>
+
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var my_scope = {myTest: "cow"}',
+                    'var fn = AJS.bind(function(dog) {',
+                    '     alert(this.myTest)',
+                    '     alert(dog)',
+                    '}, my_scope, ["fido"])',
+                    'fn()',
+                    '//Will first alert "cow"',
+                    '//than "fido" will be alerted'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.bindMethods(obj)</h3>
+    Binds every method of <code>obj</code> to itself.
+    Very useful for Ajax programming.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var Foo = function Foo(){};',
+                    'Foo.prototype = {',
+                    '   init: function() {',
+                    '      AJS.bindMethods(this)',
+                    '   },',
+                    '   mouseOver: function() {',
+                    '      alert(this)',
+                    '   }',
+                    '}',
+                    '//%mouseOver will always have this tied up to Foo'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+    <h3>AJS.callLater(function, interval)</h3>
+    Execute <code>function</code> after <code>interval</code> milliseconds
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.callLater(function() { alert("1 sec has passed") }, 1000)'
+                );
+            </script>
+        </dd>
+    </dl>
+
+</div>
+
+<h1><a name="misc_fn">Miscellaneous functions</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <h3>AJS.keys(object)</h3>
+    Returns the keys of the <code>object</code> as an <code>array</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var a = AJS.keys({a: 1, b: 2, c: 3})',
+                    '//%a equals ["a", "b", "c"]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.values(object)</h3>
+    Returns the values of the <code>object</code> as an <code>array</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var a = AJS.values({a: 1, b: 2, c: 3})',
+                    '//%a equals [1, , 3]'
+                );
+            </script>
+        </dd>
+    </dl>
+
+
+    <h3>AJS.urlencode(string)</h3>
+    URL-encodes <code>string</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var s = "http://example.com/?cow=" + AJS.urlencode("This is a test")',
+                    '//%s equals "http://example.com/?cow=This%20is%20a%20test"'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.isDefined(object)</h3>
+    Returns <code>true</code> if <code>object</code> is defined. Else <code>false</code> is returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.isDefined(not_defined)',
+                    '//%b equals false'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.isArray(object)</h3>
+    Returns <code>true</code> if <code>object</code> is an array. Else <code>false</code> is returned.
+
+    <h3>AJS.isString(object)</h3>
+    Returns <code>true</code> if <code>object</code> is a string. Else <code>false</code> is returned.
+
+    <h3>AJS.isNumber(object)</h3>
+    Returns <code>true</code> if <code>object</code> is a number. Else <code>false</code> is returned.
+
+    <h3>AJS.isObject(object)</h3>
+    Returns <code>true</code> if <code>object</code> is a object. Else <code>false</code> is returned.
+
+    <h3>AJS.isDict(object)</h3>
+    Returns <code>true</code> if <code>object</code> is a dict (JSON). Else <code>false</code> is returned.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'var b = AJS.isDict({a: 1, b: 2})',
+                    '//%b equals true',
+                    'var s = AJS.isDict("Test")',
+                    '//%s equals false'
+                );
+            </script>
+        </dd>
+    </dl>
+
+    <h3>AJS.exportToGlobalScope(scope)</h3>
+    Export AJS to global scope if <code>scope</code> is <code>null</code>. Else export AJS to scope.
+
+    <h3>AJS.withScope(scope, fn)</h3>
+    Exectue function <code>fn</code> with <code>scope</code>.
+    <dl>
+        <dt>Example:</dt>
+        <dd>
+            <script>
+                createExample(
+                    'AJS.withScope(AJS, function() {',
+                    '   alert($bytc);',
+                    '   //will alert $bytc function of AJS',
+                    '})'
+                );
+            </script>
+        </dd>
+    </dl>
+</div>
+
+<h1><a name="deffered_fn">AJS deferred</a> <a href="#toc" class="top_link">[top]</a></h1>
+<div class="fns">
+    <p>
+        A deferred gives the option to chain functions. I borrowed this idea from <a href="http://mochikit.com/">MochiKit</a> that borrowed it from <a href="http://twistedmatrix.com/trac/">Twisted</a>. My implementation is SUPER simple and is way off the initial idea of a deferred - but it's still useful and beautiful.
+    </p>
+    <p>
+        When you call <code>AJS.getRequest</code> or <code>AJS.loadJSON</code> you get a deferred object. This object has following methods:
+        <dl>
+            <dt style="padding:0"><code>addCallback(fn)</code>:</dt>
+            <dd>
+                Add the function <code>fn</code> to the end of the callback sequence.
+            </dd>
+
+            <dt><code>addErrback(fn)</code>:</dt>
+            <dd>
+                Add the function <code>fn</code> to the end of the errorback sequence.
+            </dd>
+
+            <dt><code>addCallbacks(callback, errback)</code>:</dt>
+            <dd>
+                Add function <code>callback</code> to the end of the callback sequence.<br />
+                Add function <code>errback</code> to the end of the errback sequence.
+            </dd>
+
+            <dt><code>sendReq(data)</code>:</dt>
+            <dd>
+                Send the actual request. <code>data</code> should be a JSON object.
+            </dd>
+
+        </dl>
+    </p>
+
+    <p>
+        If no error is encountered the callback sequence will be executed. If an error is encountered then the errback sequence will be executed.
+    </p>
+
+    <p>
+        The idea is best showed by an example:<br />
+        <pre class="div_help">
+var d = AJS.getRequest("http://del.icio.us/feeds/json/amix")
+
+d.addCallback(function(res_txt, req) {
+    //Eval response text to get a Delicious object
+    AJS.evalTxt(res_txt);
+    return Delicious;
+})
+d.addCallback(function(o, req) {
+    //o is now Delicious object
+    alert('Total length of posts: ' + o.posts.length);
+})
+
+d.addErrback(function(res_txt, req) { alert("Error encountered.") })
+d.addErrback(function(res_txt, req) {
+     alert("In here we could have some clean up code.")
+})
+d.sendReq()</pre>
+        Run this example? <a href="examples/deferred_delicious.html">Deferred example with Deli.cio.us</a>.
+    </p>
+    <p>
+        <dt>
+            If the request is made without errors then following text will be alerted:
+        </dt>
+        <dd>"Request complete!"</dd>
+        <dd>"... a lot of data ..."</dd>
+        <dt>
+            If an error is encountered then following text will be alerted:
+        </dt>
+        <dd>"Error encountered."</dd>
+        <dd>"Must clean up this mess."</dd>
+    </p>
+</div>
+
+</body>
+</html>
