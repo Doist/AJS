@@ -1,5 +1,5 @@
 /*
-Last Modified: 19/10/09 13:55:34
+Last Modified: 15/05/10 13:22:24
 
 AJS JavaScript library
     A very small library with a lot of functionality
@@ -137,6 +137,19 @@ var AJS = {
     },
 
     flattenList: function(list) {
+        /* Fast check if everything is a list */
+        var non_arrays = true;
+
+        map(list, function(elm) {
+            if(elm && AJS.isArray(elm)) {
+                non_arrays = false;
+                return true;
+            }
+        });
+
+        if(non_arrays)
+            return list;
+
         var has_list = false;
         var new_list = [];
 
@@ -213,8 +226,10 @@ var AJS = {
         var args = AJS.$FA(arguments);
         args.shift();
         return function() {
-            args = args.concat(AJS.$FA(arguments));
-            return fn.apply(window, args);
+            var new_args = [];
+            new_args = new_args.concat(args);
+            new_args = new_args.concat(AJS.$FA(arguments));
+            return fn.apply(window, new_args);
         }
     },
 
@@ -379,6 +394,8 @@ var AJS = {
 
     getSelectValue: function(select) {
         var select = AJS.$(select);
+        if(!select)
+            return null;
         return select.options[select.selectedIndex].value;
     },
 
@@ -394,17 +411,22 @@ var AJS = {
 
     //Shortcut: AJS.ACN
     appendChildNodes: function(elm/*, elms...*/) {
-        if(arguments.length >= 2) {
-            AJS.map(arguments, function(n) {
+        var args = AJS.flattenElmArguments(arguments);
+
+        if(args.length >= 2) {
+            AJS.map(args, function(n) {
                 if(AJS.isString(n))
                     n = AJS.TN(n);
+
                 if(AJS.isDefined(n))
                     elm.appendChild(n);
             }, 1);
         }
+
         return elm;
     },
 
+    //Shortcut: AJS.ATT
     appendToTop: function(elm/*, elms...*/) {
         var args = AJS.flattenElmArguments(arguments).slice(1);
         if(args.length >= 1) {
@@ -428,6 +450,7 @@ var AJS = {
     //Shortcut: AJS.RCN
     replaceChildNodes: function(elm/*, elms...*/) {
         var child;
+
         while ((child = elm.firstChild))
             AJS.swapDOM(child, null);
 
@@ -449,7 +472,13 @@ var AJS = {
     },
 
     swapDOM: function(dest, src) {
-        dest = AJS.getElement(dest);
+        dest = AJS.$(dest);
+
+        if(dest._$events)
+            delete dest._$events;
+
+        ElementData.remove(dest);
+
         var parent = dest.parentNode;
         if (src) {
             src = AJS.getElement(src);
@@ -516,7 +545,8 @@ var AJS = {
                 "h2", "h3", "h4", "h5", "h6", "br", "textarea", "form",
                 "p", "select", "option", "optgroup", "iframe", "script",
                 "center", "dl", "dt", "dd", "small",
-                "pre", 'i', 'label', 'thead'
+                "pre", 'i', 'label', 'thead',
+                "hr"
         ];
         var extends_ajs = function(elm) {
             AJS[elm.toUpperCase()] = function() {
@@ -719,6 +749,8 @@ var AJS = {
             }
         }
 
+        url = url.replace('//', '/')
+
         if(!method)
             method = "POST";
 
@@ -726,6 +758,9 @@ var AJS = {
     },
 
     serializeJSON: function(o) {
+        if(window.JSON && window.JSON.stringify)
+            return window.JSON.stringify(o);
+
         var objtype = typeof(o);
         if (objtype == "undefined") {
             return "null";
@@ -790,12 +825,12 @@ var AJS = {
     },
 
     evalTxt: function(txt) {
-        try {
-            return eval('('+ txt + ')');
-        }
-        catch(e) {
-            return eval(txt);
-        }
+        if(txt.indexOf('new Date(') != -1)
+            return (new Function("return " + txt))();
+
+        return window.JSON && window.JSON.parse ?
+            window.JSON.parse( txt ) :
+            (new Function("return " + txt))();
     },
 
     evalScriptTags: function(html) {
@@ -969,8 +1004,8 @@ var AJS = {
         //Reset the current
         elms = AJS.$A(elms);
         AJS.map(elms, function(elm) {
-            if(elm.events)
-                elm.events[type] = {};
+            if(elm._$events)
+                elm._$events[type] = {};
         });
 
         return AJS.AEV(elms, type, handler, listen_once);
@@ -1038,7 +1073,6 @@ var AJS = {
     },
 
     _f_guid: 0,
-    _wipe_guid: 0,
 
     //Shortcut: AJS.AEV
     addEventListener: function(elms, types, handler, listen_once) {
@@ -1052,11 +1086,11 @@ var AJS = {
             if (!handler.$f_guid) 
                 handler.$f_guid = AJS._f_guid++;
 
-            if (!elm.events) 
-                elm.events = {};
+            if (!elm._$events) 
+                elm._$events = {};
             
             AJS.map(types, function(type) {
-                var handlers = elm.events[type];
+                var handlers = elm._$events[type];
 
                 if(elm == window && type == 'load') {
                     AJS.ready_list.push( handler );
@@ -1067,17 +1101,14 @@ var AJS = {
                     }
 
                     if (!handlers) {
-                        handlers = elm.events[type] = {};
+                        handlers = elm._$events[type] = {};
 
                         if(elm["on" + type])
                             handlers[0] = elm["on" + type];
                     }
                     
-                    if(!elm._wipe_guid) {
-                        elm._wipe_guid = AJS._wipe_guid++;
-                    }
-
                     handlers[handler.$f_guid] = handler;
+
                     elm["on" + type] = AJS.handleEvent;
                 }
             });
@@ -1094,27 +1125,29 @@ var AJS = {
          if(!event)
              return ;
 
-         if(!event.ctrl && event.type.indexOf('key') != -1)
+         if(!event.ctrl) {
              AJS.setEventKey(event);
+         }
 
-         var handlers = this.events[event.type];
+         var handlers = this._$events[event.type];
 
          var handlers_to_delete = [];
          var res = true;
          for (var i in handlers) {
-             var handler = this.$$handleEvent = handlers[i];
+             var handler = handlers[i];
 
              if(handler == AJS.handleEvent)
                  continue;
 
              res = handler(event);
+
              if(handler.listen_once)
                  handlers_to_delete.push(handler);
          }
 
         if(handlers_to_delete.length > 0)
             AJS.map(handlers_to_delete, function(handler) {
-                delete me.events[event.type][handler.$f_guid];
+                delete me._$events[event.type][handler.$f_guid];
             });
 
         return res;
@@ -1124,8 +1157,8 @@ var AJS = {
     removeEventListener: function(elms, type, handler) {
         elms = AJS.$A(elms);
         map(elms, function(elm) {
-            if (elm.events && elm.events[type]) {
-                delete elm.events[type][handler.$f_guid];
+            if (elm._$events && elm._$events[type]) {
+                delete elm._$events[type][handler.$f_guid];
             }
         });
     },
@@ -1146,11 +1179,19 @@ var AJS = {
     },
 
     preventDefault: function(e) {
+        e = e || window.event;
         if(AJS.isIe()) 
-            window.event.returnValue = false;
-        else {
+            e.returnValue = false;
+        else 
             e.preventDefault();
-        }
+    },
+
+    stopPropagation: function(e) {
+        e = e || window.event;
+        if(AJS.isIe()) 
+            e.cancelBubble = true;
+        else
+            e.stopPropagation();
     },
 
     _listenOnce: function(elm, type, fn) {
@@ -1284,6 +1325,54 @@ var AJS = {
 
 }
 
+
+ElementStore = {
+
+    storage_dict: {},
+    uuid: 1,
+    expando: 'ElementStore' + (new Date).getTime(),
+
+    get: function(elm, key) {
+        var store = ElementStore.getStore(elm);
+        return store[key];
+    },
+
+    set: function(elm, key, value) {
+        var store = ElementStore.getStore(elm);
+        store[key] = value;
+        return value;
+    },
+
+    remove: function(elm, key) {
+        if(key) {
+            var store = ElementStore.getStore(elm);
+            if(store[key])
+                delete store[key];
+        }
+        else {
+            var elm_id = elm[ElementStore.expando];
+            if(elm_id) {
+                delete ElementStore.storage_dict[elm_id];
+                delete elm[ElementStore.expando];
+            }
+        }
+    },
+
+    getStore: function(elm) {
+        var expando = ElementStore.expando;
+        var storage_dict = ElementStore.storage_dict;
+        var elm_id = elm[expando];
+
+        if(!elm_id) {
+            elm_id = elm[expando] = ElementStore.uuid++;
+            storage_dict[elm_id] = {};
+        }
+
+        return storage_dict[elm_id];
+    }
+
+}
+
 AJS.Class = function(members) {
     var fn = function() {
         if(arguments[0] != 'no_init') {
@@ -1331,6 +1420,7 @@ AJS.$A = AJS.createArray;
 AJS.DI = AJS.documentInsert;
 AJS.ACN = AJS.appendChildNodes;
 AJS.RCN = AJS.replaceChildNodes;
+AJS.ATT = AJS.appendToTop;
 AJS.AEV = AJS.addEventListener;
 AJS.REV = AJS.removeEventListener;
 AJS.$bytc = AJS.getElementsByTagAndClassName;
